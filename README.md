@@ -81,4 +81,4 @@ Works in all current versions of Chrome, Edge, Firefox, and Safari. Time zone su
 
 ## License
 
-Free to use, modify, and share. Add a license of your choice (for example, MIT) if you plan to publish this project.
+This project is licensed under the [MIT License](LICENSE_)
