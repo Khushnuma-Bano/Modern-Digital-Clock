@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Digital Clock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="title-container">
+            <h1 class="clock-title">DIGITAL CLOCK</h1>
+        </div>
+    </div>
+    <div class="clock-container">
+        <div class="timezone-control">
+            <label for="timezone-selector">TIME ZONE</label>
+            <select id="timezone-selector">
+                <option value="local">Select Location</option>
+                <option value="America/New_York">New York (EST/EDT)</option>
+                <option value="Europe/London">London (GMT/BST)</option>
+                <option value="Asia/Tokyo">Tokyo (JST)</option>
+                <option value="Australia/Sydney">Sydney (AEST/AEDT)</option>
+                <option value="Asia/Kolkata">India (IST)</option>
+            </select>
+        </div>
+
+        <div class="clock">
+            <span id="hours">00</span>
+            <span class="colon">:</span>
+            <span id="minutes">00</span>
+            <span class="colon">:</span>
+            <span id="seconds">00</span>
+            <span id="ampm">AM</span>
+        </div>
+        <div class="date-display" id="date"><b>Loading Date...</b></div>
+        <div class="location-display">
+            <span class="location-pin">&#9673;</span>
+            <span id="location">Location</span>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
