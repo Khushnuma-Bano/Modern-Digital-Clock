@@ -1,84 +1,81 @@
-# Modern Digital Clock
+# Password Generator
 
-A clean, neon-styled digital clock built with plain HTML, CSS, and JavaScript. It shows the current time and date, and lets you switch between several world time zones instantly. No frameworks, no build step, no dependencies.
+A simple desktop password generator with a soft, pastel-themed interface, built with Python and [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter). Choose a minimum length, decide whether to include numbers and special characters, and generate a password with one click.
 
 ## Features
 
-- **Live 12-hour clock** with hours, minutes, seconds, and AM/PM, updated every second
-- **Time zone selector** for quick switching between locations
-- **Full date display** (e.g. "Sunday, November 1, 2026") that follows the selected time zone
-- **Location badge** showing the currently selected location
-- **Blinking colon separators** for a classic digital-clock feel
-- **Responsive layout** that scales to different screen sizes
-- **Monospace font** so the layout stays stable as digits change
-
-## Supported Time Zones
-
-| Option | IANA Identifier |
-| --- | --- |
-| Select Location (your device's local time) | local |
-| New York (EST/EDT) | `America/New_York` |
-| London (GMT/BST) | `Europe/London` |
-| Tokyo (JST) | `Asia/Tokyo` |
-| Sydney (AEST/AEDT) | `Australia/Sydney` |
-| India (IST) | `Asia/Kolkata` |
-
-Daylight saving changes are handled automatically by the browser's `Intl` support.
+- **Custom minimum length** (defaults to 12)
+- **Optional numbers** (0-9)
+- **Optional special characters** (all of Python's `string.punctuation`)
+- **Guaranteed character types:** if numbers or special characters are enabled, the password always contains at least one of each
+- **Read-only result box** so the generated password can be selected and copied
+- **Input validation** with an error dialog if the length isn't a valid number
+- **Light, soft color theme** with a cream background, sage green checkboxes, and a lilac button
 
 ## Project Structure
 
 ```
 .
-├── index.html   # Page structure and time zone dropdown
-├── script.js    # Clock logic and time zone handling
-└── style.css    # Theme, layout, and animations
+└── Password_generator.py    # Password logic and GUI in a single file
 ```
 
-## Getting Started
+## Requirements
 
-1. Download or clone the project so all three files are in the same folder.
-2. Open `index.html` in any modern web browser.
+- Python 3.8+
+- `customtkinter`
+- `tkinter` (included with most Python installations; on some Linux distros install `python3-tk`)
 
-That's it. No installation or server is required.
-
-Optionally, you can serve it locally:
+## Installation
 
 ```bash
-# Python 3
-python -m http.server 8000
-# then visit http://localhost:8000
+pip install customtkinter
 ```
+
+## Usage
+
+```bash
+python Password_generator.py
+```
+
+1. Enter the minimum password length.
+2. Tick or untick **Include Numbers** and **Include Special Characters**.
+3. Click **Generate Password**.
+4. Select the password in the result box and copy it (Ctrl+C / Cmd+C).
 
 ## How It Works
 
-1. `updateClock()` creates a new `Date` object and reads the selected value from the dropdown.
-2. If a specific time zone is chosen, it is passed as the `timeZone` option to `toLocaleTimeString()` and `toLocaleDateString()`. Otherwise the device's local time zone is used.
-3. The formatted time string (e.g. `03:45:12 PM`) is split into hours, minutes, seconds, and AM/PM, and each part is written to its own element.
-4. The function runs once on load, again whenever the dropdown changes, and then every second via `setInterval`.
+`generate_password(min_length, numbers=True, special_characters=True)` builds a pool of characters starting with letters, then adds digits and punctuation depending on the options. It appends random characters one at a time until the password is at least `min_length` characters long and contains every required character type.
 
-## Customization
+Because of this approach, the final password can be slightly longer than the minimum if the required character types haven't appeared yet by the time the minimum length is reached.
 
-**Add a time zone:** add an `<option>` to the dropdown in `index.html` using any valid [IANA time zone name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones):
+`ui_generate()` reads the settings from the window, calls the generator, and writes the result into the read-only entry box.
 
-```html
-<option value="Europe/Paris">Paris (CET/CEST)</option>
+## Security Note
+
+The generator uses Python's `random` module, which is **not designed for security-sensitive use**. For passwords you actually rely on, switch to the `secrets` module:
+
+```python
+import secrets
+# replace random.choice(char) with:
+secrets.choice(char)
 ```
 
-**Switch to 24-hour time:** in `script.js`, set `hour12: false` in `timeOptions`. Note that the code currently splits the time string on a space to separate AM/PM, so you would also need to handle the missing AM/PM value (for example, hide the `#ampm` element).
+## Known Limitations
 
-**Change the theme:** the main colors are defined directly in `style.css`:
+- Only a minimum length is supported, not an exact length.
+- Zero or negative lengths aren't rejected; they just produce a short password.
+- There is no copy-to-clipboard button.
+- Letters are always included and can't be turned off.
+- The generator only guarantees digits and symbols, not a mix of upper and lower case letters.
 
-| Color | Used for |
-| --- | --- |
-| `#00ffcc` | Neon teal text and glow |
-| `#7A4988` | Clock card background |
-| `#311432` | Dark purple backgrounds |
-| `#E39FF6` | Location badge text |
+## Ideas for Improvement
 
-## Browser Support
-
-Works in all current versions of Chrome, Edge, Firefox, and Safari. Time zone support relies on the standard `Intl` / `toLocaleTimeString` APIs.
+- Add a **Copy to Clipboard** button
+- Add a password strength indicator
+- Add an option for an exact length or a maximum length
+- Add uppercase/lowercase toggles and an option to exclude look-alike characters (such as `l`, `1`, `O`, `0`)
+- Show a dark mode toggle using `ctk.set_appearance_mode("dark")`
 
 ## License
 
-Free to use, modify, and share. Add a license of your choice (for example, MIT) if you plan to publish this project.
+This project is licensed under the [MIT License](LICENSE).
